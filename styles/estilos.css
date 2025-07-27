@@ -1,0 +1,1383 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Variables globales para el modo claro */
+:root {
+    --bg-dark: -webkit-linear-gradient(180deg, #000000,#200830,#000000);
+    --primary: #440f75;
+    --secondary: #7325bd;
+    --accent: #ffffff;
+    --color-mas: #230833c9;
+    --text: #f5f5f5;
+    --bg-card: #26083d;
+    --tw-text-opacity: 1;
+    --color-ti-os: 254 240 138;
+    --text-primary: #f1f5f9;
+    --accent-color-b: #141414c0;
+    --accent-color: #ffffff;
+    --primary-color: #5e17a0e0;
+    --secondary-color: #29272b;
+    --background-dark: #0f0022;
+    --border-color: #463355;
+    --transition-fast: 0.2s ease;
+    --text-light: #c314da;
+    
+    --color-tarjeta: #23252cc2;
+    --color-accento: #0505056c;
+    --texto-primario: #e6e6e6;
+    --texto-secundario: #b8b8b8;
+    --rojo: #ff5c5cda;
+    --amarillo: #ffbe44e1;
+    --verde: #00ca4d93;
+    --azul: #4362eeaf;
+    --morado: #7209b7;
+    --naranja: #ff7b00;
+}
+
+body.light-mode {
+    --bg-dark: -webkit-linear-gradient(180deg, #eef0f1,#e7e7ee,#eef0f1);
+    --primary: #BBE1FA;
+    --secondary: #3282B8;
+    --accent: #000000;
+    --text-primary: #000000;
+    --text: #1B262C;
+    --bg-card: #caccd34f;
+    --color-ti-os: 10 109 228;
+    --color-mas: #8f9ba39c; 
+}                         
+/* Estilos del ícono de cambio de tema */
+#theme-toggle .icon svg {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode #theme-toggle .icon svg {
+    color: #af15d6; /* Cambia el color del ícono en modo claro */ 
+}
+
+body {
+    overflow: auto;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-dark);
+    height: 100vh;
+    font-family: "Exo 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    color: var(--text);
+    position: relative;
+    overflow-y: auto;
+}
+
+/* Barra de navegación */
+nav {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.062);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 10px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  box-shadow: 18px 24px 54px -22px rgba(0,0,0,0.64);
+  z-index: 1000;
+  opacity: 0;
+  animation: aparecer-nav 0.5s ease-out 0.4s forwards;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes aparecer-nav {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Contenedor del Dock Navegacion */
+.dock {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.dock-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.dock-item.clicked .icon {
+  animation: jumpRight 0.4s ease-out forwards;
+}
+
+@keyframes jumpRight {
+  0% {
+      transform: translateX(20);
+  }
+  50% {
+      transform: translateX(35px);
+  }
+  100% {
+      transform: translateX(2);
+  }
+}
+
+.dock-item:hover {
+  transform: scale(1.0);
+}
+
+/* Estilos de los iconos */
+.dock-item .icon {
+  width: 35px;
+  height: 35px;
+  background: rgba(187, 225, 250, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dock-item .icon img {
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: scale(1.1);
+}
+
+.dock-item .icon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+
+.dock-item:hover .icon {
+  background: rgba(187, 225, 250, 0.2);
+  transform: scale(1.2) translateX(22px);
+}
+
+.dock-item:hover ~ .dock-item .icon {
+  transform: scale(1.2) translateX(3px);
+}
+
+/* Punto indicador */
+.dock-item .indicator {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -10px;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dock-item.active .indicator {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.2);
+}
+ 
+.dock-item {
+position: relative;  
+}
+
+.dock-item .tooltip {
+position: absolute;
+left: 210%;  
+top: 50%;  
+transform: translateY(-50%);  
+background: rgba(235, 232, 232, 0.897);
+color: rgb(0, 0, 0);  
+padding: 5px 10px;
+border-radius: 8px;  
+font-size: 12px;
+opacity: 0; 
+visibility: hidden;
+transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+white-space: nowrap;  
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  
+transform: translateY(-50%) translateX(-5px);  
+}
+ 
+.dock-item .tooltip::before {
+content: '';
+position: absolute;
+left: -6px;
+top: 50%;
+transform: translateY(-50%);
+border-width: 6px 6px 6px 0;
+border-style: solid;
+border-color: transparent rgba(235, 232, 232, 0.897) transparent transparent;
+}
+
+.dock-item:hover .tooltip {
+opacity: 1;  
+visibility: visible;
+transform: translateY(-50%) translateX(0); 
+}
+/* ========================= Estilos de JICM ===========================*/
+/* JICM */
+.full-screen-section {
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    width: 100%; /* Ocupa todo el ancho de la ventana */ 
+    margin: 0; /* Elimina márgenes */
+    padding: 0; /* Elimina paddings */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+}
+.profile-card { 
+    display: flex; 
+    width: 850px;
+    max-width: 1700px;
+    align-items: center; /* Centra verticalmente los elementos */
+    justify-content: space-between;
+    padding: 20px;
+    background-color: transparent; 
+    color:var(--text); 
+}
+
+/* Contenedor de los íconos */
+.social-icons {
+    display: flex;
+    gap: 15px; /* Espacio entre los íconos */
+    margin-top: 20px; /* Espacio arriba de los íconos */
+}
+
+.icon-link {
+  position: relative;
+  overflow: visible;
+}
+
+.icon-link:hover svg {
+  color: #b713d8a9; 
+  filter: 
+      drop-shadow(0 0 10px currentColor)
+      brightness(1.4);
+}
+
+.icon-link::after {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  background: 
+      radial-gradient(circle, currentColor 0%, transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.6s ease;
+}
+
+.icon-link:hover::after {
+  opacity: 0.3;
+  animation: neonRipple 0.5s ease-out infinite;
+}
+
+@keyframes neonRipple {
+  to { transform: scale(1.5); opacity: 0; }
+}
+
+/* Estilos del tooltip */
+.icon-link .tooltip {
+  position: absolute;
+  left: 120%; /* Posición a la derecha del ícono */
+  top: 50%; /* Centra verticalmente */
+  transform: translateY(-50%); /* Centra verticalmente */
+  background: rgba(235, 232, 232, 0.897); /* Fondo del tooltip */
+  color: rgb(0, 0, 0); /* Color del texto */
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  opacity: 0; /* Inicialmente invisible */
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Flecha del tooltip */
+.icon-link .tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%; /* Posición de la flecha (a la izquierda del tooltip) */
+  top: 50%; /* Centra verticalmente */
+  transform: translateY(-50%);
+  border-width: 6px 6px 6px 0; /* Flecha apuntando a la izquierda */
+  border-style: solid;
+  border-color: transparent rgba(235, 232, 232, 0.897) transparent transparent;
+}
+
+/* Mostrar tooltip al hacer hover */
+.icon-link:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tamaño de los íconos */
+.icon-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+.text-content-profile {
+    flex: 2; 
+}
+
+.text-content-profile h1 {
+    font-size: 2.9em;
+    margin-bottom: 20px;
+}
+
+.text-content-profile p {
+    font-size: 19px;
+    font-weight: 600; 
+    line-height: 1.6;  
+}
+
+.text-content-profile p strong{  
+    font-size: 24px;
+    font-weight: 600;
+    color: rgb(200 138 254);
+}
+
+.listm{
+    text-align: center;
+    color: rgb(200 138 254);
+    font-weight: 600; 
+}
+.image-content-profile {
+    flex: 1;
+    display: flex; /* Asegura que el contenedor de la imagen sea un flex container */
+    align-items: center; /* Centra la imagen verticalmente */
+    justify-content: center; /* Centra la imagen horizontalmente */
+}
+
+.image-content-profile img {
+    width: 95%; /* Ocupa el 100% del contenedor */
+    max-width: 500px; /* No supera los 500px */
+    height: auto; /* Mantiene la relación de aspecto */
+}
+
+/* ====================== Habilidades ======================*/
+.container-exp {
+    width: 100%; 
+  }
+
+  .container-exp-h {
+    width: 100%; 
+  }
+  
+  /* Contenedor del header */
+  .header-exp { 
+    display: flex;
+    width: 850px;
+    max-width: 1700px; 
+    align-items: center; /* Centra verticalmente los elementos */
+    justify-self: center;
+    margin-bottom: 60px;
+    font-weight: 600;
+    
+  }
+  
+  /* Contenedor del ícono */
+  .header-icon {
+    width: 55px; /* Ancho del contenedor del ícono */
+    height: 55px; /* Alto del contenedor del ícono */
+    display: flex;
+    align-items: center; /* Centra el ícono verticalmente */
+    justify-content: center; /* Centra el ícono horizontalmente */
+    margin-right: 2px; /* Espacio entre el ícono y el título */
+  }
+  
+  /* Estilos del ícono SVG */
+  .header-icon svg {
+    width: 80%; /* El ícono ocupa todo el espacio del contenedor */
+    height: auto; /* El ícono ocupa todo el espacio del contenedor */
+    vertical-align: middle; /* Asegura la alineación vertical */
+  }
+  
+  /* Estilos del título */
+  .header-title {
+    font-size: 2.2em;
+    font-weight: 600;
+    margin: 0; /* Elimina el margen predeterminado del h1 */
+    line-height: 1; /* Evita espacio extra en el texto */
+  }
+/* ====================== TERMINAL ======================*/
+  /* Terminal card */
+.terminal-ca{
+  width: 69%; 
+  margin: 0 auto; 
+}
+
+.contenedor-bento {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.categoria {
+  background-color: var(--color-tarjeta);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ 
+
+.categoria__cabecera {
+  background-color: var(--color-accento);
+  padding: 0.1rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.controles-terminal {
+  display: flex;
+  gap: 0.5rem;
+  position: absolute;
+  left: 1rem;
+}
+
+.control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.control--rojo { background-color: var(--rojo); }
+.control--amarillo { background-color: var(--amarillo); }
+.control--verde { background-color: var(--verde); }
+
+.categoria__titulo {
+  font-weight: 600;
+  color: var(--texto-primario);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 100%;
+}
+
+.contenedor-tecnologias {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 1.5rem;
+}
+
+.tecnologia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.tecnologia svg{
+  width: 50px;
+  height: 50px;
+}
+
+.tecnologia:hover {
+  transform: scale(1.1);
+}
+
+.tecnologia__icono {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.tecnologia__nombre {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+/* Estilos específicos por categoría */
+.categoria--frontend { border-top: 3px solid var(--azul); }
+.categoria--backend { border-top: 3px solid var(--verde); }
+.categoria--bases-datos { border-top: 3px solid var(--amarillo); }
+.categoria--herramientas { border-top: 3px solid var(--rojo); }
+.categoria--movil { border-top: 3px solid var(--morado); }
+.categoria--comunicacion { border-top: 3px solid var(--naranja); }
+
+@media (max-width: 768px) {
+  .contenedor-bento {
+      grid-template-columns: 1fr;
+  }
+  
+  .contenedor-tecnologias {
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 1rem;
+  }
+}
+
+/* ====================== Experiencia ======================*/
+.timeline {  
+    position: relative;
+    width: 850px;  
+    align-items: center; /* Centra verticalmente los elementos */
+    justify-self: center;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 5px;
+    height: calc(100% - 10px);
+    width: 2px;
+    background-color: #7c818b91;
+}
+
+.experience-item {
+    display: flex;
+    margin-bottom: 60px;
+}
+
+.timeline-dot {
+    width: 16px;
+    height: 16px;
+    background-color: rgb(200 138 254);
+    border-radius: 50%;
+    margin-right: 30px;
+    z-index: 1;
+}
+
+.experience-content {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.experience-left {
+    width: 240px;
+    margin-right: 20px;
+}
+
+.experience-title { 
+    color: rgb(200 138 254);
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.experience-company {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.experience-date {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.experience-right {
+    flex: 1;
+    min-width: 300px;
+}
+
+.experience-description {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.experience-link {
+    display: inline-block;
+    color: rgb(254 240 138 / var(--tw-text-opacity));
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.experience-link:after {
+    content: " >";
+}
+
+/* ====================== Proyectos ======================*/
+/* Contenedor de proyectos */
+.proyect-j {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 20px;
+    max-width: 1000px; /* Ancho máximo reducido */
+    width: 100%;  
+    padding: 20px; 
+    margin: 0 auto;
+    margin-top: -58px;
+}
+ /* Proyectos container */
+ .projects-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 32px; 
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  /* Project Card */
+  .project-card {
+    background-color: var(--bg-card); 
+    overflow: hidden;
+    position: relative;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal); 
+    height: 100%; 
+    animation: fadeInUp 0.6s ease forwards;
+  }
+   
+  
+  /* Project Body - ahora va primero */
+  .project-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column; 
+  }
+  
+  /* Project Header está ahora dentro del body */
+  .project-header {
+    margin-bottom: 16px;
+  }
+  
+  .project-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  
+  .badge {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    box-shadow: var(--shadow-sm);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  
+  .project-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+  }
+  
+  .project-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 1px;
+    color: rgb(200 138 254);
+    letter-spacing: -0.01em;
+  }
+  
+  .project-description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    margin-top: -24px;
+  }
+  
+  /* Techs */
+  .project-techs {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+  
+  .tech {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .tech-icon {
+    margin-top: -10px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.11);
+    border-radius: 8px;
+    padding: 8px; 
+  }
+  
+  .tech-icon svg {
+    width: 100%;
+    height: 100%; 
+  }
+  
+  .tech span {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+  
+  /* Project Thumbnail - ahora después del body */
+  .project-thumbnail {
+    position: relative;
+    overflow: hidden;
+    height: 290px; 
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .project-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+  
+ 
+  /* Project Footer */
+  .project-footer {
+    padding: 16px 24px;
+    display: flex;
+    gap: 16px;
+  }
+  
+  .project-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 0;
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    border-radius: 13px; 
+  }
+
+  /* ====================== Proyectos diseño fin ======================*/
+
+   /* Contenedor principal */
+.is { 
+    margin: 0 auto;
+    width: 75%;
+    display: flex; 
+    justify-content: center;
+  }
+  
+  /* Estilos del botón */
+  .btn-verMas {
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 13px; /* Bordes redondeados */
+    background: var(--bg-card);
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el texto y el icono */
+    color: var(--accent); /* Color del texto */
+    font-size: 16px;
+  }
+  
+  /* Efecto hover */
+  .btn-verMas:hover {
+    background: var(--color-mas); 
+  }
+  
+  /* Estilos del texto */
+  .btn-verMas span {
+    transition: transform 0.3s ease;
+  }
+  
+  /* Estilos del SVG (icono) */
+  .btn-verMas svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor; /* Hereda el color del texto */
+    transition: transform 0.3s ease;
+  }
+  
+  /* Efecto hover en el icono */
+  .btn-verMas:hover svg {
+    transform: translateX(5px); /* Desplaza el icono a la derecha */
+  }
+ 
+  
+   
+  
+  .project-link:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    opacity: 0.1;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .project-link:hover:before {
+    opacity: 0.15;
+  }
+  
+  .project-link .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .project-link .icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+  }
+  
+  .project-link.preview {
+    color: var(--accent);
+  }
+  
+  .project-link.github {
+    color: var(--text-primary);
+  }
+
+/* ====================== Contacto ======================*/
+/* ====================== Sobre mi ======================*/
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px; 
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.profile-image {
+    position: relative;
+    width: 250px;
+    height: 250px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--accent-color);
+    transition: transform 0.3s ease;
+}
+
+
+.window-toggle {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: white;
+    border: 2px solid var(--accent-color);
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+}
+
+.window-toggle:hover {
+    background-color: var(--accent-color-b);
+    transform: translateX(-50%) scale(1.05);
+}
+
+.about-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0;
+    width: 500px;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent-color);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.about-window.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.window-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.window-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.window-header {
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+.window-header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-btn {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.header-btn:hover {
+    opacity: 0.7;
+}
+
+.btn-close { background-color: #FF5F57; }
+.btn-minimize { background-color: #FFBD2E; }
+.btn-maximize { background-color: #28CA41; }
+
+.window-content {
+    padding: 20px; 
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.window-content h2 {
+    color: rgb(200 138 254);
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.window-content p {
+    color: rgb(255, 255, 255); 
+}
+
+/* ====================== Adaptativo ======================*/
+@media (max-width: 992px) {
+    /* Barra de navegación */
+    nav {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        padding: 10px 20px;
+        border-radius: 0 0 30px 30px;
+    }
+    .dock {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .dock-item .icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .dock-item:hover .icon {
+        transform: scale(1.2);
+    }
+    .container-exp {
+        width: 100%;  
+      }
+      .full-screen-section {
+        width: 100%; 
+      }
+}
+@media (max-width: 834px) { 
+  .terminal-card{
+    width: 700px; 
+  }
+  .timeline{
+    width: 95%;
+  } 
+  .is{
+    width: 95%; 
+  }
+  .header-exp{
+    width: 95%;
+  }
+  .proyect-j{
+    padding: 0px;
+    gap: 10px;
+  }
+  .dock-item .tooltip {
+    position: absolute;
+    left: 50%; /* Centra horizontalmente */
+    top: 100%; /* Coloca el tooltip debajo del ícono */
+    
+  }
+   
+  .dock-item .tooltip::before {
+    
+    left: 50%; /* Centra la flecha horizontalmente */
+    top: -6px; /* Coloca la flecha justo encima del tooltip */
+    transform: translateX(-50%);
+    border-width: 0 6px 6px 6px; /* Forma de la flecha */
+    
+  }
+   
+  .dock-item:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Mueve el tooltip a su posición final */
+  }
+
+  @keyframes jumpRight {
+    0% {
+        transform: translateY(20);
+    }
+    50% {
+        transform: translateY(35px);
+    }
+    100% {
+        transform: translateY(2);
+    }
+  }
+
+} 
+@media (max-width: 768px) { 
+    
+    .full-screen-section { 
+        width: auto; /* Ocupa el 100% del ancho del viewport */
+        overflow: hidden; /* Evita desbordamientos */  
+    }
+    .profile-card{ 
+        margin: 0 auto;  
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+    }
+    .social-icons{ 
+        margin-bottom: 30px;
+        margin: 0 auto;
+        width: 40vh; 
+    }
+    .icon-link{ 
+        margin: 0 auto;
+    }
+    .icon-link svg {
+        width: 32px; /* Cambia el ancho */
+        height: 32px; /* Cambia el alto */
+    }
+
+    .image-content-profile img{
+        width: 350px;
+    }
+
+    .text-content-profile h1 {
+        font-size: 2.9em; 
+    }
+    
+    .text-content-profile p {
+        font-size: 19px; 
+    }
+    
+    .text-content-profile p strong{  
+        font-size: 1.9em; 
+    }
+
+    .terminal-card {  
+      width: 690px; 
+    }
+    .is{
+      width: 95%; 
+    }
+
+    .header-exp{
+      width: 95%;
+    }
+
+    .timeline{
+      width: 95%;
+    }
+    .proyect-j{
+      width: 95%; 
+      padding: 0px;
+      gap: 10px;
+    }
+    .projects-grid{  
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .image-content-profile{
+      margin-top: 50px;
+    }
+}
+
+@media (max-width: 576px) { 
+  .text-content-profile h1 {
+    font-size: 1.9em; 
+}
+.image-content-profile img {
+  width: 69%; /* Ocupa el 100% del contenedor */ 
+}
+
+.text-content-profile p {
+  font-size: 20px; 
+}
+
+.text-content-profile p strong{  
+  font-size: 25px;
+}
+
+.icon-link svg {
+  width: 22px;
+  height: 22px;
+}
+
+nav {
+  display: none; /* Clase para ocultar el nav */
+}
+
+.dock {
+  display: none; /* Clase para ocultar el nav */
+}
+
+
+.terminal-card{
+  width: 90%;
+}
+
+.proyect-j{
+  grid-template-columns: repeat(1, 1fr); /* 2 columnas */
+}
+
+/* Estilos del icon-link */
+.icon-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent); /* Color del ícono */
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.icon-link:hover {
+  transform: translateY(-3px); /* Efecto de elevación */
+  color: var(--secondary); /* Cambiar color al hacer hover */
+}
+
+
+.icon-link .tooltip {
+  position: absolute;
+  left: 50%; 
+  top: -30px; 
+  transform: translateX(-50%); 
+  background: rgba(235, 232, 232, 0.897); 
+  color: rgb(0, 0, 0); 
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  white-space: nowrap; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.icon-link .tooltip::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;  
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: rgba(235, 232, 232, 0.897) transparent transparent transparent;
+}
+ 
+.icon-link:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.about-window{
+  width: 390px;
+}
+
+}
+
+@media (max-width: 431px) { 
+  .text-content-profile h1 {
+    font-size: 1.8em !important;
+    margin-top: 20px;
+  }
+  
+  .container-exp{ 
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .container-exp-h{ 
+    width: 70%;
+    margin: 0 auto;
+  }
+  .categoria__titulo{
+    text-align: end;
+    font-size: 12px;
+  }
+  .content-card{ 
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .listm{ 
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .profile-container{ 
+    width: 60%;
+    margin: 0 auto;
+
+  }
+  .social-icons {
+    width: 100% !important; 
+    justify-content: center;
+  }
+
+  /* Terminal/tecnologías */
+  .contenedor-tecnologias {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .tecnologia__icono, .tecnologia svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 390px) {
+  .about-window{
+    width: 340px;
+  }
+  .content{ 
+    width: auto;
+  }
+  .content-card{
+    width: 100%; 
+  }
+  .container-exp{ 
+    width: 100%;
+    margin: 0 auto;
+  }
+  .profile-container{
+    width: 70%;
+    margin: 0 auto; 
+  }
+}
+
+@media (max-width: 376px) {
+  .about-window{
+    width: 300px;
+  }
+}
+
+@media (max-width: 320px) {
+  .text-content-profile h1 {
+    font-size: 1.2em; 
+}
+.image-content-profile img {
+  width: 39%; /* Ocupa el 100% del contenedor */ 
+}
+
+.text-content-profile p {
+  font-size: 15px; 
+}
+
+.text-content-profile p strong{  
+  font-size: 18px;
+}
+.container-exp{
+  margin-top: 50px;
+}
+.header-title{
+  font-size: 25px;
+}
+
+.header-icon{
+  width: 30px;
+  height: 30px;
+}
+
+.about-window{
+  width: 290px;
+}
+
+}
